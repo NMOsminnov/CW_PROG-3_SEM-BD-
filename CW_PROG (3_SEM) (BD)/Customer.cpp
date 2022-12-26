@@ -1,6 +1,12 @@
 
 #include "BD.h"
-
+// Копирование данных
+void CustomerCopyData(Customer* newCurrent, Customer* current) {
+	newCurrent->ID = current->ID;
+	newCurrent->name = current->name;
+	newCurrent->surname = current->surname;
+	newCurrent->phoneNumber = current->phoneNumber;
+}
 //Считывание данных заказчика с файла (однонаправленный линейный список)
 void FileReadCustomer(string f_name, Customer** customerList) {
 
@@ -44,6 +50,40 @@ void FileReadCustomer(string f_name, Customer** customerList) {
 		}
 	}
 }
+
+void AddCustomer(Customer** customerList) {
+	bool New = false; // Новый ли список
+	Customer* current;
+	int i = 1;
+
+	// Если списка нет то создаем его первый элемент
+	if (*customerList == NULL) {
+		*customerList = new Customer;
+		New = true;
+	}
+
+	current = *customerList;
+	//Если список не новый, то идем в конец и создаем новый элемент в конце списка
+	if (!New) {
+		while (current->next != NULL) {
+			current = current->next;
+			
+		}
+		i = current->ID;
+		current->next = new Customer;
+		current = current->next;
+	}
+
+	// Ручной ввод значений полей
+	current->ID = i++;
+	cout << "Пожалуйста, введите имя заказчика:";
+	cin >> current->name;
+	cout << "Пожалуйста, введите фамилию заказчика:";
+	cin >> current->surname;
+	cout << "Пожалуйста, введите номер телефона заказчика:";
+	cin >> current->phoneNumber;
+
+}                                      
 //Вывод в консоль списка с заказчиками
 void PrintCustomer(Customer* doorList) {
 
@@ -102,29 +142,26 @@ void PrintCustomer(Customer* doorList) {
 bool DeleteCustomer(Customer** customerList, int position) {
 
 	Customer* current = *customerList;
-	Customer* del;
+	Customer* del;				   // Указатель на удаляемый элемент 
 
-	if (position == 1) {
-		*customerList = (*customerList)->next;
-		delete current;
-	}
-	else {
-		for (int i = 0; i < position - 2; i++) {
-			if (current->next->next != NULL) {
-				current = current->next;
-			}
-			else {
-				cout << "Элемент не обнаружен" << endl;
-				return false;
-			}
+	if (customerList) {
+		while ((current->next) && (current->next->ID != position)) {
+			current = current->next;
 		}
 
-		del = current->next;
-		current->next = current->next->next;
-		delete del;
-		return true;
+		if (current->next) {
+			del = current->next;
+			current->next = current->next->next;
+			delete del;
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
-	return true;
+	else {
+		return false;
+	}
 }
 //Удаление списка с заказчиками
 void DeleteCustomerList(Customer** customerList) {
@@ -139,17 +176,18 @@ void DeleteCustomerList(Customer** customerList) {
 //Копипаст!
 Customer* GetCustomer(Customer* customerList, int position) {
 	Customer* current = customerList;
+	Customer* newCurrent;
 	if (customerList) {
-		for (int i = 0; i < position - 1; i++) {
-			if (current->next) {
-				current = current->next;
+		while (current) {
+			if (current->ID == position) {
+				newCurrent = new Customer;
+				CustomerCopyData(newCurrent, current);
+				return newCurrent;
 			}
-			else {
-				return NULL;
-			}
+			current = current->next;
 		}
 	}
-	return current;
+	return NULL;
 }
 Customer* FindNameOfCustomer(Customer* customerList, string key) {
 
@@ -168,15 +206,12 @@ Customer* FindNameOfCustomer(Customer* customerList, string key) {
 					newCurrent->next = new Customer;
 					newCurrent = newCurrent->next;
 				}
-				newCurrent->ID = current->ID; // И копируем данные
-				newCurrent->name = current->name;
-				newCurrent->surname = current->surname;
-				newCurrent->phoneNumber = current->phoneNumber;
+				CustomerCopyData(newCurrent, current); // И копируем данные
 			}
 			current = current->next; // Далее передвигаемся вперед по основному списку
 		}
 	}
-
+	DeleteCustomerList(&customerList);
 	return newList; // В конце возвращаем новый список
 }
 Customer* FindSurnameOfCustomer(Customer* customerList, string key) {
@@ -196,15 +231,12 @@ Customer* FindSurnameOfCustomer(Customer* customerList, string key) {
 					newCurrent->next = new Customer;
 					newCurrent = newCurrent->next;
 				}
-				newCurrent->ID = current->ID; // И копируем данные
-				newCurrent->name = current->name;
-				newCurrent->surname = current->surname;
-				newCurrent->phoneNumber = current->phoneNumber;
+				CustomerCopyData(newCurrent, current); // И копируем данные
 			}
 			current = current->next; // Далее передвигаемся вперед по основному списку
 		}
 	}
-
+	DeleteCustomerList(&customerList);
 	return newList; // В конце возвращаем новый список
 }
 Customer* FindPhoneNumberOfCustomer(Customer* customerList, string key) {
@@ -224,15 +256,12 @@ Customer* FindPhoneNumberOfCustomer(Customer* customerList, string key) {
 					newCurrent->next = new Customer;
 					newCurrent = newCurrent->next;
 				}
-				newCurrent->ID = current->ID; // И копируем данные
-				newCurrent->name = current->name;
-				newCurrent->surname = current->surname;
-				newCurrent->phoneNumber = current->phoneNumber;
+				CustomerCopyData(newCurrent, current); // И копируем данные			
 			}
 			current = current->next; // Далее передвигаемся вперед по основному списку
 		}
 	}
-
+	DeleteCustomerList(&customerList);
 	return newList; // В конце возвращаем новый список
 }
 

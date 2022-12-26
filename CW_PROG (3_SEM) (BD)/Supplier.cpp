@@ -1,8 +1,31 @@
 
 #include "BD.h"
 
+// Door.cpp
+// Меняет размер массива
+int* IntReSize(int* array, int oldSize, int newSize) {
+	int* newArr = new int[newSize];
+	if (array) {
+		for (int i = 0; (i < oldSize) && (i < newSize); i++) {
+			newArr[i] = array[i];
+		}
+		delete[] array;
+	}
 
-bool chekOrderID(int orderID, Supplier* supplierList) {
+	return newArr;
+}
+
+void SupplierCopyData(Supplier* newCurrent, Supplier* current) {
+	newCurrent->ID = current->ID;
+	newCurrent->name = current->name;
+	newCurrent->quantityOrders = current->quantityOrders;
+	newCurrent->orderID = new int[current->quantityOrders];
+	for (int i = 0; i < current->quantityOrders; i++) {
+		newCurrent->orderID[i] = current->orderID[i];
+	}
+}
+
+bool ChekOrderID(int orderID, Supplier* supplierList) {
 	Supplier* current = supplierList;
 	if (supplierList && orderID > 0) {
 		do {
@@ -17,7 +40,7 @@ bool chekOrderID(int orderID, Supplier* supplierList) {
 	else {
 		return false;
 	}
-}
+} //!!!!!!!!!
 
 void FileReadSupplier(string f_name, Supplier** supplierList) {
 
@@ -119,6 +142,46 @@ void PrintSupplier(Supplier* supplierList) {
 		cout << "Заказов не обнаружено!\n";
 	}
 }
+
+bool DeleteSupplier(Supplier** customerList, int position) {
+
+	Supplier* current = *customerList;
+	Supplier* del;				   // Указатель на удаляемый элемент 
+
+	if (customerList) {
+		while ((current->next) && (current->next->ID != position)) {
+			current = current->next;
+		}
+
+		if (current->next) {
+			del = current->next;
+			current->next = current->next->next;
+			delete del;
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	else {
+		return false;
+	}
+}
+//Удаление списка с заказчиками
+void DeleteSupplierList(Supplier** customerList) {
+
+	Supplier* current = *customerList;
+	while (current != NULL) {
+		current = current->next;
+		delete* customerList;
+		*customerList = current;
+	}
+}
+//Копипаст!
+
+
+
+
 void SupplierInfo(Supplier* supplier, Order* orderList) {
 
 	Order* current;

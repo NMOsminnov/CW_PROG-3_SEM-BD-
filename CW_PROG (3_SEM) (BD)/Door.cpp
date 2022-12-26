@@ -7,7 +7,15 @@
 
 
 
-
+void DoorCopyData(Door* newCurrent, Door* current) {
+	newCurrent->ID = current->ID;
+	newCurrent->type = current->type; // И копируем данные
+	newCurrent->name = current->name;
+	newCurrent->price = current->price;
+	newCurrent->productionTime = current->productionTime;
+	newCurrent->priceOfAccessories = current->priceOfAccessories;
+	newCurrent->typeOfAccessories = current->typeOfAccessories;
+}
 
 //Считывание данных двери с файла (однонаправленный линейный список)
 void FileReadDoor(string f_name, Door** doorList) {
@@ -147,14 +155,15 @@ void AddDoor(Door** doorList){
 	if (!New) {
 		while (current->next != NULL) {
 			current = current->next;
-			i++;
+			
 		}
-		i++;
+		i = current->ID;
 		current->next = new Door;
 		current = current->next;
 	}
 
 	// Ручной ввод значений полей
+	current->ID = i++;
 	cout << "Пожалуйста, введите тип двери:";
 	cin >> current->type;
 	cout << "Пожалуйста, введите имя двери:";
@@ -169,31 +178,27 @@ void AddDoor(Door** doorList){
 //Удаление элемента в заданной позиции
 bool DeleteDoor(Door** doorList, int position) {
 
-	Door* current = *doorList; // Вспомогательный указатель для движения по списку
+	Door* current = *doorList;
 	Door* del;				   // Указатель на удаляемый элемент 
 
-	if (position == 1) {       // Если решили удалить корень спсика
-		*doorList = (*doorList)->next;
-		delete current;
-	}
-	else {// Иначе движемся до элемента с нужным индексом (ind - 1)
-		for (int i = 0; i < position-2; i++) {
-			if (current->next->next != NULL) {
-				current = current->next;
-			}
-			else {
-				cout << "Элемент не обнаружен" << endl;
-				return false;
-			}
+	if (doorList) {
+		while ((current->next) && (current->next->ID != position)) {
+			current = current->next;
 		}
-		// И удаляем его
-		del = current->next;
-		current->next = current->next->next;
-		delete del;
 
-		return true;
+		if (current->next) {
+			del = current->next;
+			current->next = current->next->next;
+			delete del;
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
-	return true;
+	else {
+		return false;
+	}
 }
 //Удаление списка с заказами
 void DeleteDoorList(Door** doorList) {
@@ -208,17 +213,18 @@ void DeleteDoorList(Door** doorList) {
 //Копипаст...
 Door* GetDoor(Door* doorList, int position) {
 	Door* current = doorList; // Вспомогательный указатель для движения по списку
+	Door* newCurrent;
 	if (doorList) {	 // Если список существует	
-		while ((current)&&(current->ID!=position)) { // То идем по циклу
-			if (current->next) { // И если следующий элемент существует
-				current = current->next; // То переходим на него
+		while (current) {
+			if (current->ID == position) {
+				newCurrent = new Door;
+				DoorCopyData(newCurrent, current);
+				return current;
 			}
-			else { // Иначе возвращаем 0 т.к. элемент лежит за пределами списка
-				return NULL;
-			}
+			current = current->next;
 		}
 	}
-	return current;
+	return NULL;
 }
 Door* FindTypeOfDoor(Door* doorList, string key) {
 	
@@ -237,11 +243,7 @@ Door* FindTypeOfDoor(Door* doorList, string key) {
 					newCurrent->next = new Door;
 					newCurrent = newCurrent->next;
 				}
-					newCurrent->type = current->type; // И копируем данные
-					newCurrent->name = current->name;
-					newCurrent->price = current->price;
-					newCurrent->productionTime = current->productionTime;
-					newCurrent->priceOfAccessories = current->priceOfAccessories;				
+				DoorCopyData(newCurrent, current);
 			}
 			current = current->next; // Далее передвигаемся вперед по основному списку
 		}
@@ -266,11 +268,7 @@ Door* FindNameOfDoor(Door* doorList, string key) {
 					newCurrent->next = new Door;
 					newCurrent = newCurrent->next;
 				}
-				newCurrent->type = current->type; // И копируем данные
-				newCurrent->name = current->name;
-				newCurrent->price = current->price;
-				newCurrent->productionTime = current->productionTime;
-				newCurrent->priceOfAccessories = current->priceOfAccessories;
+				DoorCopyData(newCurrent, current); // И копируем данные
 			}
 			current = current->next; // Далее передвигаемся вперед по основному списку
 		}
@@ -295,11 +293,7 @@ Door* FindProductionTimeOfDoor(Door* doorList, string key) {
 					newCurrent->next = new Door;
 					newCurrent = newCurrent->next;
 				}
-				newCurrent->type = current->type; // И копируем данные
-				newCurrent->name = current->name;
-				newCurrent->price = current->price;
-				newCurrent->productionTime = current->productionTime;
-				newCurrent->priceOfAccessories = current->priceOfAccessories;
+				DoorCopyData(newCurrent, current); // И копируем данные
 			}
 			current = current->next; // Далее передвигаемся вперед по основному списку
 		}
@@ -324,11 +318,8 @@ Door* FindTypeOfAccessoriesOfDoor(Door* doorList, string key) {
 					newCurrent->next = new Door;
 					newCurrent = newCurrent->next;
 				}
-				newCurrent->type = current->type; // И копируем данные
-				newCurrent->name = current->name;
-				newCurrent->price = current->price;
-				newCurrent->productionTime = current->productionTime;
-				newCurrent->priceOfAccessories = current->priceOfAccessories;
+				 
+				DoorCopyData(newCurrent, current);// И копируем данные
 			}
 			current = current->next; // Далее передвигаемся вперед по основному списку
 		}
@@ -353,11 +344,7 @@ Door* FindPriceOfDoor(Door* doorList, float key) {
 					newCurrent->next = new Door;
 					newCurrent = newCurrent->next;
 				}
-				newCurrent->type = current->type; // И копируем данные
-				newCurrent->name = current->name;
-				newCurrent->price = current->price;
-				newCurrent->productionTime = current->productionTime;
-				newCurrent->priceOfAccessories = current->priceOfAccessories;
+				DoorCopyData(newCurrent, current); // И копируем данные
 			}
 			current = current->next; // Далее передвигаемся вперед по основному списку
 		}
@@ -382,11 +369,7 @@ Door* FindPriceOfAccessoriesOfDoor(Door* doorList, float key) {
 					newCurrent->next = new Door;
 					newCurrent = newCurrent->next;
 				}
-				newCurrent->type = current->type; // И копируем данные
-				newCurrent->name = current->name;
-				newCurrent->price = current->price;
-				newCurrent->productionTime = current->productionTime;
-				newCurrent->priceOfAccessories = current->priceOfAccessories;
+				DoorCopyData(newCurrent, current); // И копируем данные
 			}
 			current = current->next; // Далее передвигаемся вперед по основному списку
 		}

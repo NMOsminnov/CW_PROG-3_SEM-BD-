@@ -74,6 +74,7 @@ struct Order {
 	int doorID = NULL;
 	int customerID = NULL;
 	string deliveryTime;
+	bool is_used = false;
 };
 
 struct Supplier {
@@ -82,7 +83,7 @@ struct Supplier {
 	string name;
 	int quantityOrders = NULL;
 	int* orderID = NULL;
-	Supplier* next;
+	Supplier* next = NULL;
 };
 
 
@@ -105,6 +106,7 @@ Door* FindPriceOfAccessoriesOfDoor(Door* doorList, float key);
 
 
 void FileReadCustomer(string f_name, Customer** doorList);
+void AddCustomer(Customer** customerList);
 void PrintCustomer(Customer* doorList);
 bool DeleteCustomer(Customer** customerList, int position);
 void DeleteCustomerList(Customer** customerList);
@@ -120,12 +122,17 @@ void PrintSupplier(Supplier* supplierList);
 void SupplierInfo(Supplier* supplier, Order* orderList);
 
 
+void SwitchUsedFlag(Order* order);
 
 void AddOrder(Order** orderList, int doorID, int customerID,string deliveryTime);
 void PrintOrder(Order* orderList);
 bool DeleteOrder(Order** orderList, int position);
 void DeleteOrderList(Order** orderList, int position);
+Order* FindOrderID(Order* orderList, int key);
 Order* GetOrder(Order* orderList, int key);
+Order* FindDoorID(Order* orderList, int key);
+Order* FindCustomerID(Order* orderList, int key);
+Order* FindDeliveryTimeID(Order* orderList, string key);
 
 
 #endif

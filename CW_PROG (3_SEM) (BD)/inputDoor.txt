@@ -1,33 +1,34 @@
-
+1
 type1
 name1
 600
 PTime1
 200
 typeOfAccessories
-supplier
 
 
+2
 type1
 name1
 600
 PTime1
 200
 typeOfAccessories
-supplier
 
+
+3
 type2
 name1
 600
 PTime1
 200
 typeOfAccessories
-supplier
 
+
+4
 type2
 name1
 600
 PTime1
 200
 typeOfAccessories
-supplier

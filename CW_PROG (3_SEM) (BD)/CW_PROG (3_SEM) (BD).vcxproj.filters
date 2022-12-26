@@ -18,21 +18,33 @@
     <ClCompile Include="main.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="BD.cpp">
+    <ClCompile Include="Door.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Supplier.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Order.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Customer.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BD.h">
-      <Filter>Исходные файлы</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="inputDoor.txt">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Файлы ресурсов</Filter>
     </Text>
     <Text Include="inputCustomer.txt">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Файлы ресурсов</Filter>
     </Text>
+    <Text Include="inputSupplier.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BD.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

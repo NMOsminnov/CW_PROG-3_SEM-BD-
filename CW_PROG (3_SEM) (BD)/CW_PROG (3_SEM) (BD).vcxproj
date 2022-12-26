@@ -127,8 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BD.cpp" />
+    <ClCompile Include="Customer.cpp" />
+    <ClCompile Include="Door.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Order.cpp" />
+    <ClCompile Include="Supplier.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BD.h" />
@@ -136,6 +139,7 @@
   <ItemGroup>
     <Text Include="inputCustomer.txt" />
     <Text Include="inputDoor.txt" />
+    <Text Include="inputSupplier.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

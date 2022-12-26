@@ -15,24 +15,29 @@ int main()
 	Door* tempDoor = NULL;
 	Customer* customerList = NULL;
 	Customer* tempCustomer = NULL;
+	Supplier* supplierList = NULL;
+	Supplier* tempSupplier = NULL;
 	Order* orderList = NULL;
 
 	string doorInputFile = "inputDoor.txt";
 	string customerInputFile = "inputCustomer.txt";
+	string supplierInputFile = "inputSupplier.txt";
 	string user_answ;
 
 
 
 	int answ = -1;
+	int answ1 = 0;
 	while (answ != 0) {
 		cout << "Добро пожаловать в меню!\nПожалуйста, выберите действие:\n"
 			<< "1.Считать список дверей из файла.\n"
 			<< "2.Считать список заказчиков из файла.\n"
-			<< "3.Добавить заказ.\n"
-			<< "4.Удалить дверь.\n"
-			<< "5.Удалить все двери\n"
-			<< "6.Удалить заказ\n"
-			<< "7.Найти все двери с заданным типом.\n"
+			<< "3.Считать список поставщиков.\n"
+			<< "4.Добавить заказ.\n"
+			<< "5.Удалить дверь.\n"
+			<< "6.Удалить все двери\n"
+			<< "7.Удалить заказ\n"
+			<< "8.Найти все двери с заданным типом.\n"
 			<< "Ваш ответ:";
 
 		cin >> answ;
@@ -50,8 +55,13 @@ int main()
 			PrintCustomer(customerList);
 
 			break;
-
+			
 		case 3:
+			FileReadSupplier(supplierInputFile,&supplierList);
+			PrintSupplier(supplierList);
+			break;
+
+		case 4:
 
 			system("cls");
 
@@ -63,18 +73,20 @@ int main()
 				PrintDoor(doorList);
 				cout << "Пожалуйста, выберите элемент для формирования заказа:";
 				cin >> answ;
-				tempDoor = GiveDoor(doorList, answ);
+				tempDoor = GetDoor(doorList, answ);
+				
 
 				PrintCustomer(customerList);
 				cout << "Пожалуйста, выберите элемент для формирования заказа:";
-				cin >> answ;
-				tempCustomer = GiveCustomer(customerList, answ);
+				cin >> answ1;
+				tempCustomer = GetCustomer(customerList, answ1);
+				
 
 				if (tempDoor && tempCustomer) {
 					cout << "Пожалуста, введите дату доставки:";
 					cin >> user_answ;
 					cout << "Формирование заказа\n";
-					AddOrder(&orderList, tempDoor, tempCustomer,user_answ);
+					AddOrder(&orderList, answ, answ1,user_answ);
 					PrintOrder(orderList);
 				}
 				else {
@@ -96,7 +108,7 @@ int main()
 			}
 			break;
 			
-		case 4:
+		case 5:
 			system("cls");
 			PrintDoor(doorList);
 			cout << endl << "Укажите номер двери:";
@@ -106,13 +118,13 @@ int main()
 			PrintDoor(doorList);
 			system("pause");
 
-		case 5:
+		case 6:
 			system("cls");
 			DeleteDoorList(&doorList);
 			PrintDoor(doorList);			
 			break;
 
-		case 6:
+		case 7:
 			system("cls");
 			if (orderList) {
 				PrintOrder(orderList);
@@ -130,7 +142,7 @@ int main()
 			}
 			break;
 
-		case 7:
+		case 8:
 
 			if (doorList) {
 				cout << "Пожалуйста, введите ключ:";
@@ -141,6 +153,7 @@ int main()
 			}
 
 			break;
+			
 			answ = -1;
 		}
 	}

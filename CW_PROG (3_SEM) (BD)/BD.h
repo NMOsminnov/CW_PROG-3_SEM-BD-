@@ -95,6 +95,14 @@ bool DeleteDoor(Door** doorList, int position);
 void DeleteDoorList(Door** doorList);
 Door* GetDoor(Door* doorList, int position);
 Door* FindTypeOfDoor(Door* doorList, string key);
+Door* FindNameOfDoor(Door* doorList, string key);
+Door* FindProductionTimeOfDoor(Door* doorList, string key);
+Door* FindTypeOfAccessoriesOfDoor(Door* doorList, string key);
+Door* FindPriceOfDoor(Door* doorList, float key);
+Door* FindPriceOfAccessoriesOfDoor(Door* doorList, float key);
+
+
+
 
 void FileReadCustomer(string f_name, Customer** doorList);
 void PrintCustomer(Customer* doorList);
@@ -102,6 +110,9 @@ bool DeleteCustomer(Customer** customerList, int position);
 void DeleteCustomerList(Customer** customerList);
 Customer* GetCustomer(Customer* customerList, int position);
 Customer* FindNameOfCustomer(Customer* customerList, string key);
+Customer* FindSurnameOfCustomer(Customer* customerList, string key);
+Customer* FindPhoneNumberOfCustomer(Customer* customerList, string key);
+
 
 
 void FileReadSupplier(string f_name, Supplier** supplierList);

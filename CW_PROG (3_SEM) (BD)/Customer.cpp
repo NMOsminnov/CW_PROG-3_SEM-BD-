@@ -153,31 +153,86 @@ Customer* GetCustomer(Customer* customerList, int position) {
 }
 Customer* FindNameOfCustomer(Customer* customerList, string key) {
 
-	Customer* newList = NULL;
-	Customer* current = customerList;
-	Customer* newCurrent = NULL;
+	Customer* newList = NULL;			// Новый список, который будет возвращаться в качестве результата
+	Customer* current = customerList;		// Указатель, с помощью которого движемся по основному списку
+	Customer* newCurrent = NULL;		// Указатель при помощи которого движемся по списку с результатами
 
-	if (current) {
-		while (current) {
-			if (current->name == key) {
-				if (!newCurrent) {
-					newCurrent = new Customer;
-					newList = newCurrent;
+	if (current) { // Если исходный список существует
+		while (current) { // То пока не дойдем до его конца
+			if (current->name == key) { // Ищем ключ
+				if (!newCurrent) { // Если это первый найденный элемент 
+					newCurrent = new Customer; // То создаем корень нового списка
+					newList = newCurrent; // Запоминаем корень который будем возвращать					
 				}
-				else {
+				else { // Иначе создаем следующий элемент списка
 					newCurrent->next = new Customer;
 					newCurrent = newCurrent->next;
 				}
-				newCurrent->ID = current->ID;
+				newCurrent->ID = current->ID; // И копируем данные
 				newCurrent->name = current->name;
 				newCurrent->surname = current->surname;
 				newCurrent->phoneNumber = current->phoneNumber;
 			}
-			current = current->next;
+			current = current->next; // Далее передвигаемся вперед по основному списку
 		}
 	}
 
-	return newList;
+	return newList; // В конце возвращаем новый список
 }
+Customer* FindSurnameOfCustomer(Customer* customerList, string key) {
 
+	Customer* newList = NULL;			// Новый список, который будет возвращаться в качестве результата
+	Customer* current = customerList;		// Указатель, с помощью которого движемся по основному списку
+	Customer* newCurrent = NULL;		// Указатель при помощи которого движемся по списку с результатами
+
+	if (current) { // Если исходный список существует
+		while (current) { // То пока не дойдем до его конца
+			if (current->name == key) { // Ищем ключ
+				if (!newCurrent) { // Если это первый найденный элемент 
+					newCurrent = new Customer; // То создаем корень нового списка
+					newList = newCurrent; // Запоминаем корень который будем возвращать					
+				}
+				else { // Иначе создаем следующий элемент списка
+					newCurrent->next = new Customer;
+					newCurrent = newCurrent->next;
+				}
+				newCurrent->ID = current->ID; // И копируем данные
+				newCurrent->name = current->name;
+				newCurrent->surname = current->surname;
+				newCurrent->phoneNumber = current->phoneNumber;
+			}
+			current = current->next; // Далее передвигаемся вперед по основному списку
+		}
+	}
+
+	return newList; // В конце возвращаем новый список
+}
+Customer* FindPhoneNumberOfCustomer(Customer* customerList, string key) {
+
+	Customer* newList = NULL;			// Новый список, который будет возвращаться в качестве результата
+	Customer* current = customerList;		// Указатель, с помощью которого движемся по основному списку
+	Customer* newCurrent = NULL;		// Указатель при помощи которого движемся по списку с результатами
+
+	if (current) { // Если исходный список существует
+		while (current) { // То пока не дойдем до его конца
+			if (current->name == key) { // Ищем ключ
+				if (!newCurrent) { // Если это первый найденный элемент 
+					newCurrent = new Customer; // То создаем корень нового списка
+					newList = newCurrent; // Запоминаем корень который будем возвращать					
+				}
+				else { // Иначе создаем следующий элемент списка
+					newCurrent->next = new Customer;
+					newCurrent = newCurrent->next;
+				}
+				newCurrent->ID = current->ID; // И копируем данные
+				newCurrent->name = current->name;
+				newCurrent->surname = current->surname;
+				newCurrent->phoneNumber = current->phoneNumber;
+			}
+			current = current->next; // Далее передвигаемся вперед по основному списку
+		}
+	}
+
+	return newList; // В конце возвращаем новый список
+}
 

@@ -5,19 +5,6 @@
 
 
 
-// Door.cpp
-// Меняет размер массива
-int* IntReSize(int* array, int oldSize, int newSize) {
-	int* newArr = new int[newSize];
-	if (array) {
-		for (int i = 0; (i < oldSize) && (i < newSize); i++) {
-			newArr[i] = array[i];
-		}
-		delete[] array;
-	}
-	
-	return newArr;
-}
 
 
 
@@ -262,5 +249,149 @@ Door* FindTypeOfDoor(Door* doorList, string key) {
 
 	return newList; // В конце возвращаем новый список
 }
+Door* FindNameOfDoor(Door* doorList, string key) {
 
+	Door* newList = NULL;			// Новый список, который будет возвращаться в качестве результата
+	Door* current = doorList;		// Указатель, с помощью которого движемся по основному списку
+	Door* newCurrent = NULL;		// Указатель при помощи которого движемся по списку с результатами
+
+	if (current) { // Если исходный список существует
+		while (current) { // То пока не дойдем до его конца
+			if (current->name == key) { // Ищем ключ
+				if (!newCurrent) { // Если это первый найденный элемент 
+					newCurrent = new Door; // То создаем корень нового списка
+					newList = newCurrent; // Запоминаем корень который будем возвращать					
+				}
+				else { // Иначе создаем следующий элемент списка
+					newCurrent->next = new Door;
+					newCurrent = newCurrent->next;
+				}
+				newCurrent->type = current->type; // И копируем данные
+				newCurrent->name = current->name;
+				newCurrent->price = current->price;
+				newCurrent->productionTime = current->productionTime;
+				newCurrent->priceOfAccessories = current->priceOfAccessories;
+			}
+			current = current->next; // Далее передвигаемся вперед по основному списку
+		}
+	}
+
+	return newList; // В конце возвращаем новый список
+}
+Door* FindProductionTimeOfDoor(Door* doorList, string key) {
+
+	Door* newList = NULL;			// Новый список, который будет возвращаться в качестве результата
+	Door* current = doorList;		// Указатель, с помощью которого движемся по основному списку
+	Door* newCurrent = NULL;		// Указатель при помощи которого движемся по списку с результатами
+
+	if (current) { // Если исходный список существует
+		while (current) { // То пока не дойдем до его конца
+			if (current->productionTime == key) { // Ищем ключ
+				if (!newCurrent) { // Если это первый найденный элемент 
+					newCurrent = new Door; // То создаем корень нового списка
+					newList = newCurrent; // Запоминаем корень который будем возвращать					
+				}
+				else { // Иначе создаем следующий элемент списка
+					newCurrent->next = new Door;
+					newCurrent = newCurrent->next;
+				}
+				newCurrent->type = current->type; // И копируем данные
+				newCurrent->name = current->name;
+				newCurrent->price = current->price;
+				newCurrent->productionTime = current->productionTime;
+				newCurrent->priceOfAccessories = current->priceOfAccessories;
+			}
+			current = current->next; // Далее передвигаемся вперед по основному списку
+		}
+	}
+
+	return newList; // В конце возвращаем новый список
+}
+Door* FindTypeOfAccessoriesOfDoor(Door* doorList, string key) {
+
+	Door* newList = NULL;			// Новый список, который будет возвращаться в качестве результата
+	Door* current = doorList;		// Указатель, с помощью которого движемся по основному списку
+	Door* newCurrent = NULL;		// Указатель при помощи которого движемся по списку с результатами
+
+	if (current) { // Если исходный список существует
+		while (current) { // То пока не дойдем до его конца
+			if (current->typeOfAccessories == key) { // Ищем ключ
+				if (!newCurrent) { // Если это первый найденный элемент 
+					newCurrent = new Door; // То создаем корень нового списка
+					newList = newCurrent; // Запоминаем корень который будем возвращать					
+				}
+				else { // Иначе создаем следующий элемент списка
+					newCurrent->next = new Door;
+					newCurrent = newCurrent->next;
+				}
+				newCurrent->type = current->type; // И копируем данные
+				newCurrent->name = current->name;
+				newCurrent->price = current->price;
+				newCurrent->productionTime = current->productionTime;
+				newCurrent->priceOfAccessories = current->priceOfAccessories;
+			}
+			current = current->next; // Далее передвигаемся вперед по основному списку
+		}
+	}
+
+	return newList; // В конце возвращаем новый список
+}
+Door* FindPriceOfDoor(Door* doorList, float key) {
+
+	Door* newList = NULL;			// Новый список, который будет возвращаться в качестве результата
+	Door* current = doorList;		// Указатель, с помощью которого движемся по основному списку
+	Door* newCurrent = NULL;		// Указатель при помощи которого движемся по списку с результатами
+
+	if (current) { // Если исходный список существует
+		while (current) { // То пока не дойдем до его конца
+			if (current->price == key) { // Ищем ключ
+				if (!newCurrent) { // Если это первый найденный элемент 
+					newCurrent = new Door; // То создаем корень нового списка
+					newList = newCurrent; // Запоминаем корень который будем возвращать					
+				}
+				else { // Иначе создаем следующий элемент списка
+					newCurrent->next = new Door;
+					newCurrent = newCurrent->next;
+				}
+				newCurrent->type = current->type; // И копируем данные
+				newCurrent->name = current->name;
+				newCurrent->price = current->price;
+				newCurrent->productionTime = current->productionTime;
+				newCurrent->priceOfAccessories = current->priceOfAccessories;
+			}
+			current = current->next; // Далее передвигаемся вперед по основному списку
+		}
+	}
+
+	return newList; // В конце возвращаем новый список
+}
+Door* FindPriceOfAccessoriesOfDoor(Door* doorList, float key) {
+
+	Door* newList = NULL;			// Новый список, который будет возвращаться в качестве результата
+	Door* current = doorList;		// Указатель, с помощью которого движемся по основному списку
+	Door* newCurrent = NULL;		// Указатель при помощи которого движемся по списку с результатами
+
+	if (current) { // Если исходный список существует
+		while (current) { // То пока не дойдем до его конца
+			if (current->priceOfAccessories == key) { // Ищем ключ
+				if (!newCurrent) { // Если это первый найденный элемент 
+					newCurrent = new Door; // То создаем корень нового списка
+					newList = newCurrent; // Запоминаем корень который будем возвращать					
+				}
+				else { // Иначе создаем следующий элемент списка
+					newCurrent->next = new Door;
+					newCurrent = newCurrent->next;
+				}
+				newCurrent->type = current->type; // И копируем данные
+				newCurrent->name = current->name;
+				newCurrent->price = current->price;
+				newCurrent->productionTime = current->productionTime;
+				newCurrent->priceOfAccessories = current->priceOfAccessories;
+			}
+			current = current->next; // Далее передвигаемся вперед по основному списку
+		}
+	}
+
+	return newList; // В конце возвращаем новый список
+}
 

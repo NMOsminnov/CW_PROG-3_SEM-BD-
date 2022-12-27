@@ -159,7 +159,7 @@ void AddDoor(Door** doorList){
 			current = current->next;
 			
 		}
-		i = current->ID;
+		i = current->ID+1;
 		current->next = new Door;
 		current = current->next;
 	}

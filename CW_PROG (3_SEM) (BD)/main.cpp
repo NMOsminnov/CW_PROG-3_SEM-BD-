@@ -11,28 +11,32 @@ using namespace std;
 int main()
 {
 	setlocale(LC_ALL, "ru");
-	Door* doorList = NULL;
-	Door* tempDoor = NULL;
-	Customer* customerList = NULL;
-	Customer* tempCustomer = NULL;
-	Supplier* supplierList = NULL;
-	Supplier* tempSupplier = NULL;
-	Order* orderList = NULL;
-	Order* tempOrder = NULL;
+	Door* doorList = NULL;				// Список дверей
+	Door* tempDoor = NULL;				// Доп список дверей
+	Customer* customerList = NULL;		// Список заказчиков
+	Customer* tempCustomer = NULL;		// Доп список заказчтков
+	Supplier* supplierList = NULL;		// Список поставщиков 
+	Supplier* tempSupplier = NULL;		// Доп список поставщиков
+	Order* orderList = NULL;			// Список заказов
+	Order* tempOrder = NULL;			// Доп список заказов
 
+
+	// Файлы с входными данными
 	string doorInputFile = "inputDoor.txt";
 	string customerInputFile = "inputCustomer.txt";
 	string supplierInputFile = "inputSupplier.txt";
 	string orderInputFile = "inputOrder.txt";
+
+
+	// Переменные для ответов пользователя
 	string user_answ;
-
-
-
 	int answ = -1;
 	int answ1 = 0;
-	while (answ != 0) {
+
+
+	while (answ != 0) { // Основной цикл программы
 		system("cls");
-		cout << "Добро пожаловать в меню!\nПожалуйста, выберите раздел с действиями:\n"
+		cout << "Добро пожаловать в меню!\nПожалуйста, выберите раздел с действиями:\n" 
 			<< "1.Двери\n"
 			<< "2.Заказчики\n"
 			<< "3.Заказы\n"
@@ -41,11 +45,11 @@ int main()
 			<< "0.Выход из программы\n"
 			<< "Ваш ответ:";
 
-		cin >> answ;
+		cin >> answ; // Считываем ответ
 
 		switch (answ) {
-		case 1:
-			while (answ != 0) {
+		case 1:  // Раздел дверей
+			while (answ != 0) { // Пока не выйдем из раздела
 				system("cls");
 				cout << "Раздел: Действия со списками дверей.\n"
 					<< "Пожалуйста, укажите действие.\n\n"
@@ -57,30 +61,30 @@ int main()
 					<< "6.Удаление списка дверей\n"
 					<< "0.Выход из раздела.\n"
 					<< "Ваш ответ:";
-				cin >> answ;
+				cin >> answ;  // Считывем ответ пользователя
 
 				switch (answ) {
-				case 1:
+				case 1:		//Считывание списка из файла
 					system("cls");
 					FileReadDoor(doorInputFile, &doorList);
 					PrintDoor(doorList);
 					system("pause");
 					break;
 
-				case 2:
+				case 2:		//Добавление с консоли двери
 					system("cls");
 					AddDoor(&doorList);
 					PrintDoor(doorList);
 					system("pause");
 					break;
 
-				case 3:
+				case 3:		//Печать списка
 					system("cls");
 					PrintDoor(doorList);
 					system("pause");
 					break;
 
-				case 4:
+				case 4:		//Поиск по соответствующим полям
 					if (doorList) {
 						tempDoor = doorList;
 						while (answ != 0) {
@@ -190,10 +194,12 @@ int main()
 										doorList = NULL;
 										cout << "Список сброшен!\n";
 										system("pause");
+										answ = 0;
 									}
 								}
 							}
 						}
+						answ = -1;
 					}
 					else {
 						cout << "Текущий список пуст. Пожалуйста, заполните список.\n";
@@ -201,25 +207,32 @@ int main()
 					}
 					break;
 
-				case 5:
-					system("cls");
-					PrintDoor(doorList);
-					cout << "\n Введите ID удаляемого элемента:";
-					cin >> answ;
-					if (DeleteDoor(&doorList, answ)) {
+				case 5:     //Удаление выбранного элемента
+					if (doorList) {
 						system("cls");
 						PrintDoor(doorList);
-						cout << "\n\nЭлемент c ID:" << answ << " успешно удален.\n";
+						cout << "\n Введите ID удаляемого элемента:";
+						cin >> answ;
+						if (DeleteDoor(&doorList, answ)) {
+							system("cls");
+							PrintDoor(doorList);
+							cout << "\n\nЭлемент c ID:" << answ << " успешно удален.\n";
+						}
+						else {
+							system("cls");
+							PrintDoor(doorList);
+							cout << "\n\nЭлемент c ID:" << answ << " не найден.\n";
+						}
+						
+						
 					}
 					else {
-						system("cls");
-						PrintDoor(doorList);
-						cout << "\n\nЭлемент c ID:" << answ << " не найден.\n";
+						cout << "Список пуст!" << endl;
 					}
 					system("pause");
 					break;
 
-				case 6:
+				case 6:		//Удаление списка дверей
 					system("cls");
 					DeleteDoorList(&doorList);
 					PrintDoor(doorList);
@@ -227,10 +240,11 @@ int main()
 					system("pause");
 					break;
 				}
+				
 			}
 			break;
 
-		case 2:
+		case 2: // Раздел заказчиков аналогичен разделу дверей
 
 			while (answ != 0) {
 
@@ -349,10 +363,12 @@ int main()
 										doorList = NULL;
 										cout << "Список сброшен!\n";
 										system("pause");
+										answ = 0;
 									}
 								}
 							}
 						}
+						answ = -1;
 					}
 					else {
 						cout << "Текущий список пуст. Пожалуйста, заполните список.\n";
@@ -361,19 +377,26 @@ int main()
 					break;
 
 				case 5:
-					system("cls");
-					PrintCustomer(customerList);
-					cout << "\n Введите ID удаляемого элемента:";
-					cin >> answ;
-					if (DeleteCustomer(&customerList, answ)) {
+					if (customerList) {
 						system("cls");
 						PrintCustomer(customerList);
-						cout << "\n\nЭлемент c ID:" << answ << " успешно удален.\n";
+						cout << "\n Введите ID удаляемого элемента:";
+						cin >> answ;
+						if (DeleteCustomer(&customerList, answ)) {
+							system("cls");
+							PrintCustomer(customerList);
+							cout << "\n\nЭлемент c ID:" << answ << " успешно удален.\n";
+						}
+						else {
+							system("cls");
+							PrintCustomer(customerList);
+							cout << "\n\nЭлемент c ID:" << answ << " не найден.\n";
+						}
+						
+						
 					}
 					else {
-						system("cls");
-						PrintCustomer(customerList);
-						cout << "\n\nЭлемент c ID:" << answ << " не найден.\n";
+						cout << "Список пуст!" << endl;
 					}
 					system("pause");
 					break;
@@ -390,7 +413,7 @@ int main()
 			}
 			break;
 
-		case 3:
+		case 3: // Раздел заказов аналогичен разделу дверей
 
 			while (answ != 0) {
 
@@ -455,6 +478,7 @@ int main()
 							cout << "Нет списка заказчиков\n";
 						}
 					}
+					system("pause");
 					break;
 
 				case 3:
@@ -472,7 +496,7 @@ int main()
 								<< "Выберите вариант из перечисленных ниже:\n"
 								<< "1.Поиск по ID.\n"
 								<< "2.Поиск по ID двери.\n"
-								<< "3.Поиск по ID поставщика.\n"
+								<< "3.Поиск по ID заказчика.\n"
 								<< "4.Поиск по сроку доставки.\n"
 								<< "5.Вывести текущий список.\n"
 								<< "6.Сброс поиска.\n"
@@ -543,10 +567,12 @@ int main()
 										orderList = NULL;
 										cout << "Список сброшен!\n";
 										system("pause");
+										answ = 0;
 									}
 								}
 							}
 						}
+						answ = -1;
 					}
 					else {
 						cout << "Текущий список пуст. Пожалуйста, заполните список.\n";
@@ -555,19 +581,24 @@ int main()
 					break;
 
 				case 5:
-					system("cls");
-					PrintOrder(orderList);
-					cout << "\n Введите ID удаляемого элемента:";
-					cin >> answ;
-					if (DeleteOrder(&orderList, answ)) {
+					if (orderList) {
 						system("cls");
 						PrintOrder(orderList);
-						cout << "\n\nЭлемент c ID:" << answ << " успешно удален.\n";
+						cout << "\n Введите ID удаляемого элемента:";
+						cin >> answ;
+						if (DeleteOrder(&orderList, answ)) {
+							system("cls");
+							PrintOrder(orderList);
+							cout << "\n\nЭлемент c ID:" << answ << " успешно удален.\n";
+						}
+						else {
+							system("cls");
+							PrintOrder(orderList);
+							cout << "\n\nЭлемент c ID:" << answ << " не найден.\n";
+						}
 					}
 					else {
-						system("cls");
-						PrintOrder(orderList);
-						cout << "\n\nЭлемент c ID:" << answ << " не найден.\n";
+						cout << "Список пуст!" << endl;
 					}
 					system("pause");
 					break;
@@ -584,8 +615,8 @@ int main()
 			}
 			break;
 
-		case 4:
-			if (orderList) {
+		case 4: // Раздел поставщиков аналогичен разделу дверей за 1 исключением
+			if (orderList) { // Внутрь пускает только если есть список заказов
 				while (answ != 0) {
 
 					system("cls");
@@ -702,10 +733,12 @@ int main()
 											supplierList = NULL;
 											cout << "Список сброшен!\n";
 											system("pause");
+											answ = 0;
 										}
 									}
 								}
 							}
+							answ = -1;
 						}
 						else {
 							cout << "Текущий список пуст. Пожалуйста, заполните список.\n";
@@ -713,11 +746,17 @@ int main()
 						}
 						break;
 					case 5:
-						PrintSupplier(supplierList);
-						cout << "Введите ID элемента:";
-						cin >> answ;
-						tempSupplier = FindSupplierID(supplierList, answ);
-						SupplierInfo(tempSupplier,orderList);
+						if (supplierList) {
+							PrintSupplier(supplierList);
+							cout << "Введите ID элемента:";
+							cin >> answ;
+							tempSupplier = FindSupplierID(supplierList, answ);
+							SupplierInfo(tempSupplier, orderList);
+							
+						}
+						else {
+							cout << "Список пуст!" << endl;
+						}
 						system("pause");
 						break;
 					case 6:

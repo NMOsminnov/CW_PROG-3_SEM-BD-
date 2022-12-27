@@ -11,8 +11,8 @@ typeOfAccessories
 type1
 name1
 600
-PTime1
-200
+PTime2
+201
 typeOfAccessories
 
 
@@ -30,5 +30,5 @@ type2
 name1
 600
 PTime1
-200
+201
 typeOfAccessories

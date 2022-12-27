@@ -9,6 +9,57 @@ void OrderCopyData(Order* newCurrent, Order* current) {
 	newCurrent->deliveryTime = current->deliveryTime;
 }
 //Добавление заказа
+void FileReadOrder(string f_name, Order** orderList) {
+	ifstream ifs(f_name);
+	if (ifs.is_open()) {
+		bool New = false;
+		Order* current;
+		string temp;
+
+		if (*orderList == NULL) {
+			*orderList = new Order;
+			New = true;
+		}
+
+		current = *orderList;
+
+		if (!New) {
+			while (current->next != *orderList) {
+				current = current->next;
+				current->next = NULL;
+			}
+		}
+
+
+
+		while (!ifs.eof()) {
+			ifs >> temp;
+
+			if (temp == "") {
+				break;
+			}
+			if (!New) {
+				current->next = new Order;
+				current = current->next;
+			}
+			else {
+				New = false;
+			}
+			if (!ifs.eof()) {
+				current->ID = stoi(temp);
+				temp = "";
+				ifs >> current->doorID;
+				ifs >> current->customerID;
+				ifs >> current->deliveryTime;
+			}
+		}
+		current->next = *orderList;
+	}
+	else {
+		std::cout << "Файл не найден\n.";
+	}
+}
+
 void AddOrder(Order** orderList, int doorID, int customerID, string deliveryTime) {
 
 	bool New = false;
@@ -99,19 +150,45 @@ void PrintOrder(Order* orderList) {
 //Удаление элемента в заданной позиции
 bool DeleteOrder(Order** orderList, int position) {
 
+	Order* current = *orderList;
+	Order* del;				   // Указатель на удаляемый элемент 
+
+	if (orderList) {
+	
+			while ((current->next) && (current->next->ID != position)) {
+				current = current->next;
+			}
+
+			if (current->next) {
+				del = current->next;
+				current->next = current->next->next;
+				delete del;
+				return true;
+			}
+			else {
+				return false;
+			}
+		
+	}
+	else {
+		return false;
+	}
 
 	return false;
 }
 //Удаление списка заказов
-void DeleteOrderList(Order** orderList, int position) {
-	Order* current = (*orderList)->next;
-	Order* del = current;
-	while (current->next != *orderList) {
-		current = current->next;
-		delete del;
-		del = current;
+void DeleteOrderList(Order** orderList) {
+	if (*orderList) {
+		Order* current = (*orderList)->next;
+		Order* del = current;
+		while (current->next != *orderList) {
+			current = current->next;
+			delete del;
+			del = current;
+		}
+		delete* orderList;
+		*orderList = NULL;
 	}
-	delete* orderList;
 }
 
 void SwitchUsedFlag(Order* order) {
@@ -148,6 +225,7 @@ Order* GetOrder(Order* orderList, int key) {
 			if (current->ID == key) {
 				newCurrent = new Order;
 				OrderCopyData(newCurrent, current);
+				newCurrent->next = newCurrent;
 				return newCurrent;
 			}
 			current = current->next;
@@ -175,8 +253,12 @@ Order* FindDoorID(Order* orderList, int key) {
 				OrderCopyData(newCurrent, current);
 			}
 			current = current->next; // Далее передвигаемся вперед по основному списку
-		}while (current->next)
+		 } while (current->next!= orderList);
+		 if (newCurrent) {
+			 newCurrent->next = newList;
+		 }
 	}
+	
 	return newList; // В конце возвращаем новый список
 }
 Order* FindCustomerID(Order* orderList, int key) {
@@ -198,11 +280,15 @@ Order* FindCustomerID(Order* orderList, int key) {
 				OrderCopyData(newCurrent, current);
 			}
 			current = current->next; // Далее передвигаемся вперед по основному списку
-		} while (current->next)
+		} while (current->next != orderList);
+		if (newCurrent) {
+			newCurrent->next = newList;
+		}
 	}
+	
 	return newList; // В конце возвращаем новый список
 }
-Order* FindDeliveryTimeID(Order* orderList, string key) {
+Order* FindDeliveryTime(Order* orderList, string key) {
 	Order* newList = NULL;			// Новый список, который будет возвращаться в качестве результата
 	Order* current = orderList;		// Указатель, с помощью которого движемся по основному списку
 	Order* newCurrent = NULL;		// Указатель при помощи которого движемся по списку с результатами
@@ -221,8 +307,12 @@ Order* FindDeliveryTimeID(Order* orderList, string key) {
 				OrderCopyData(newCurrent, current);
 			}
 			current = current->next; // Далее передвигаемся вперед по основному списку
-		} while (current->next)
+		} while (current->next != orderList);
+		if (newCurrent) {
+			newCurrent->next = newList;
+		}
 	}
+	
 	return newList; // В конце возвращаем новый список
 }
 

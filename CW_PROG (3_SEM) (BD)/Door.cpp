@@ -20,6 +20,11 @@ void DoorCopyData(Door* newCurrent, Door* current) {
 //Считывание данных двери с файла (однонаправленный линейный список)
 void FileReadDoor(string f_name, Door** doorList) {
 
+
+	ifstream ifs(f_name);  // Открываем наш файлик
+
+	if (ifs.is_open()) {
+
 	bool New = false; // Флаг, говорящий нам о том новый ли это список
 	Door* current;    // Текущий элемент
 	string temp;	  // Временная переменная 
@@ -37,9 +42,6 @@ void FileReadDoor(string f_name, Door** doorList) {
 		}
 	}
 
-	ifstream ifs(f_name);  // Открываем наш файлик
-
-	if (ifs.is_open()) {
 		while (!ifs.eof()) {   // И если он открылся считываем данные из него
 			ifs >> temp;
 			if (temp == "") {  // Проверка на то, считается ли хоть что - нибудь
@@ -65,7 +67,7 @@ void FileReadDoor(string f_name, Door** doorList) {
 		}
 	}
 	else {
-		delete* doorList;
+		std::cout << "Файл не найден\n.";
 	}
 }
 //Вывод в консоль списка с дверями
@@ -174,6 +176,8 @@ void AddDoor(Door** doorList){
 	cin >> current->productionTime;
 	cout << "Пожалуйста, введите траты на фурнитуру двери:";
 	cin >> current->priceOfAccessories;
+	cout << "Пожалуйста, укажите тип фурнитуры:";
+	cin >> current->typeOfAccessories;
 }                                      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //Удаление элемента в заданной позиции
 bool DeleteDoor(Door** doorList, int position) {
@@ -182,18 +186,26 @@ bool DeleteDoor(Door** doorList, int position) {
 	Door* del;				   // Указатель на удаляемый элемент 
 
 	if (doorList) {
-		while ((current->next) && (current->next->ID != position)) {
-			current = current->next;
-		}
 
-		if (current->next) {
-			del = current->next;
-			current->next = current->next->next;
+		if (position == 1) {
+			del = *doorList;
+			*doorList = (*doorList)->next;
 			delete del;
-			return true;
 		}
 		else {
-			return false;
+			while ((current->next) && (current->next->ID != position)) {
+				current = current->next;
+			}
+
+			if (current->next) {
+				del = current->next;
+				current->next = current->next->next;
+				delete del;
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 	}
 	else {

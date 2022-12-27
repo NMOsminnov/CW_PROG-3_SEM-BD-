@@ -53,8 +53,6 @@ struct Door {
 	string typeOfAccessories;
 };
 
-
-
 struct Customer {
 
 	int ID = NULL;
@@ -64,7 +62,6 @@ struct Customer {
 	string surname;
 	string phoneNumber;
 };
-
 
 struct Order {
 	Order* next = NULL;
@@ -117,22 +114,31 @@ Customer* FindPhoneNumberOfCustomer(Customer* customerList, string key);
 
 
 
-void FileReadSupplier(string f_name, Supplier** supplierList);
+void FileReadSupplier(string f_name, Supplier** supplierList,Order* orderList);
+void AddSupplier(Supplier** supplierList, Order* orderList);
 void PrintSupplier(Supplier* supplierList);
+bool DeleteSupplier(Supplier** customerList, int position);
+void DeleteSupplierList(Supplier** customerList);
 void SupplierInfo(Supplier* supplier, Order* orderList);
+Supplier* GetSupplier(Supplier* supplierList, int key);
+Supplier* FindSupplierID(Supplier* supplierList, int key);
+Supplier* FindSupplierName(Supplier* supplierList, string key);
+Supplier* FindQuantityOrders(Supplier* supplierList, int key);
+Supplier* FindOrderID(Supplier* supplierList, int key);
 
 
 void SwitchUsedFlag(Order* order);
 
+void FileReadOrder(string f_name, Order** orderList);
 void AddOrder(Order** orderList, int doorID, int customerID,string deliveryTime);
 void PrintOrder(Order* orderList);
 bool DeleteOrder(Order** orderList, int position);
-void DeleteOrderList(Order** orderList, int position);
+void DeleteOrderList(Order** orderList);
 Order* FindOrderID(Order* orderList, int key);
 Order* GetOrder(Order* orderList, int key);
 Order* FindDoorID(Order* orderList, int key);
 Order* FindCustomerID(Order* orderList, int key);
-Order* FindDeliveryTimeID(Order* orderList, string key);
+Order* FindDeliveryTime(Order* orderList, string key);
 
 
 #endif

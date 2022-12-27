@@ -9,7 +9,8 @@ void CustomerCopyData(Customer* newCurrent, Customer* current) {
 }
 //Считывание данных заказчика с файла (однонаправленный линейный список)
 void FileReadCustomer(string f_name, Customer** customerList) {
-
+	ifstream ifs(f_name);
+	if (ifs.is_open()) {
 	bool New = false;
 	Customer* current;
 	string temp;
@@ -27,27 +28,32 @@ void FileReadCustomer(string f_name, Customer** customerList) {
 		}
 	}
 
-	ifstream ifs(f_name);
+	
+	
+		while (!ifs.eof()) {
+			ifs >> temp;
 
-	while (!ifs.eof()) {
-		ifs >> temp;
-
-		if (temp == "") {
-			break;
+			if (temp == "") {
+				break;
+			}
+			if (!New) {
+				current->next = new Customer;
+				current = current->next;
+			}
+			else {
+				New = false;
+			}
+			if (!ifs.eof()) {
+				current->ID = stoi(temp);
+				temp = "";
+				ifs >> current->name;
+				ifs >> current->surname;
+				ifs >> current->phoneNumber;
+			}
 		}
-		if (!New) {
-			current->next = new Customer;
-			current = current->next;
-		}
-		else {
-			New = false;
-		}
-		if (!ifs.eof()) {
-			current->name = temp;
-			temp = "";
-			ifs >> current->surname;
-			ifs >> current->phoneNumber;
-		}
+	}
+	else {
+		std::cout << "Файл не найден\n.";
 	}
 }
 
@@ -69,7 +75,7 @@ void AddCustomer(Customer** customerList) {
 			current = current->next;
 			
 		}
-		i = current->ID;
+		i = (current->ID)+1;
 		current->next = new Customer;
 		current = current->next;
 	}
@@ -115,7 +121,7 @@ void PrintCustomer(Customer* doorList) {
 				<< setw(phoneNumberLenght) << leftJunction;
 
 			cout << endl << setfill(space) << verticalLine
-				<< setw(numberLenght - 1) << i++ << right << verticalLine
+				<< setw(numberLenght - 1) << current->ID << right << verticalLine
 				<< setw(nameLenght - 1) << current->name << right << verticalLine
 				<< setw(surnameLenght - 1) << current->surname << right << verticalLine
 				<< setw(phoneNumberLenght - 1) << current->phoneNumber << right << verticalLine;
@@ -145,19 +151,22 @@ bool DeleteCustomer(Customer** customerList, int position) {
 	Customer* del;				   // Указатель на удаляемый элемент 
 
 	if (customerList) {
-		while ((current->next) && (current->next->ID != position)) {
-			current = current->next;
-		}
 
-		if (current->next) {
-			del = current->next;
-			current->next = current->next->next;
-			delete del;
-			return true;
-		}
-		else {
-			return false;
-		}
+
+			while ((current->next) && (current->next->ID != position)) {
+				current = current->next;
+			}
+
+			if (current->next) {
+				del = current->next;
+				current->next = current->next->next;
+				delete del;
+				return true;
+			}
+			else {
+				return false;
+			}
+		
 	}
 	else {
 		return false;
@@ -211,7 +220,6 @@ Customer* FindNameOfCustomer(Customer* customerList, string key) {
 			current = current->next; // Далее передвигаемся вперед по основному списку
 		}
 	}
-	DeleteCustomerList(&customerList);
 	return newList; // В конце возвращаем новый список
 }
 Customer* FindSurnameOfCustomer(Customer* customerList, string key) {
@@ -222,7 +230,7 @@ Customer* FindSurnameOfCustomer(Customer* customerList, string key) {
 
 	if (current) { // Если исходный список существует
 		while (current) { // То пока не дойдем до его конца
-			if (current->name == key) { // Ищем ключ
+			if (current->surname == key) { // Ищем ключ
 				if (!newCurrent) { // Если это первый найденный элемент 
 					newCurrent = new Customer; // То создаем корень нового списка
 					newList = newCurrent; // Запоминаем корень который будем возвращать					
@@ -236,7 +244,6 @@ Customer* FindSurnameOfCustomer(Customer* customerList, string key) {
 			current = current->next; // Далее передвигаемся вперед по основному списку
 		}
 	}
-	DeleteCustomerList(&customerList);
 	return newList; // В конце возвращаем новый список
 }
 Customer* FindPhoneNumberOfCustomer(Customer* customerList, string key) {
@@ -247,7 +254,7 @@ Customer* FindPhoneNumberOfCustomer(Customer* customerList, string key) {
 
 	if (current) { // Если исходный список существует
 		while (current) { // То пока не дойдем до его конца
-			if (current->name == key) { // Ищем ключ
+			if (current->phoneNumber == key) { // Ищем ключ
 				if (!newCurrent) { // Если это первый найденный элемент 
 					newCurrent = new Customer; // То создаем корень нового списка
 					newList = newCurrent; // Запоминаем корень который будем возвращать					
@@ -261,7 +268,6 @@ Customer* FindPhoneNumberOfCustomer(Customer* customerList, string key) {
 			current = current->next; // Далее передвигаемся вперед по основному списку
 		}
 	}
-	DeleteCustomerList(&customerList);
 	return newList; // В конце возвращаем новый список
 }
 

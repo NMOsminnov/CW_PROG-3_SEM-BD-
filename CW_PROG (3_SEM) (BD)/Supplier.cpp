@@ -42,10 +42,12 @@ bool ChekOrderID(int orderID, Supplier* supplierList) {
 	}
 } //!!!!!!!!!
 
-void FileReadSupplier(string f_name, Supplier** supplierList) {
-
+void FileReadSupplier(string f_name, Supplier** supplierList, Order* orderList) {
+	ifstream ifs(f_name);
+	if (ifs.is_open()) {
 	bool New = false;
 	Supplier* current;
+	Order* tempOrder;
 	string temp;
 	char t;
 	int size = 0;
@@ -65,42 +67,52 @@ void FileReadSupplier(string f_name, Supplier** supplierList) {
 		}
 	}
 
-	ifstream ifs(f_name);
-
-	while (!ifs.eof()) {
-		size = 0;
-		ifs >> temp;
-		if (temp != "") {
-			if (!New) {
-				current->next = new Supplier;
-				current = current->next;
-			}
-			current->name = temp;
-
-			ifs.get(t);
-			while (t != '\n' && !ifs.eof()) {
-				temp = "";
-				ifs.get(t);
-				while (t != ' ' && !ifs.eof() && t != '\n') {
-					temp += t;
-					ifs.get(t);
+	
+		while (!ifs.eof()) {
+			size = 0;
+			ifs >> temp;
+			if (temp != "") {
+				if (!New) {
+					current->next = new Supplier;
+					current = current->next;
 				}
-				size++;
-				current->orderID = IntReSize(current->orderID, size - 1, size);
-				current->orderID[size - 1] = stoi(temp);
-			}
+				current->name = temp;
 
-			current->ID = ID++;
-			current->quantityOrders = size;
-			New = false;
+				ifs.get(t);
+				while (t != '\n' && !ifs.eof()) {
+					temp = "";
+					ifs.get(t);
+					while (t != ' ' && !ifs.eof() && t != '\n') {
+						temp += t;
+						ifs.get(t);
+					}
+
+					tempOrder = FindOrderID(orderList, stoi(temp));
+					
+					if (tempOrder&&!(tempOrder->is_used)) {
+						size++;
+						current->orderID = IntReSize(current->orderID, size - 1, size);
+						current->orderID[size - 1] = stoi(temp);
+						SwitchUsedFlag(tempOrder);
+					}
+				}
+
+
+				current->ID = ID++;
+				current->quantityOrders = size;
+				New = false;
+			}
 		}
+		current->next = *supplierList;
 	}
-	current->next = *supplierList;
+	else {
+		std::cout << "Файл не найден\n.";
+	}
 }
 void PrintSupplier(Supplier* supplierList) {
 	Supplier* current = supplierList;
 
-	if (current != NULL) {
+	if (current) {
 
 		setlocale(LC_ALL, "C");
 
@@ -139,28 +151,39 @@ void PrintSupplier(Supplier* supplierList) {
 
 	}
 	else {
-		cout << "Заказов не обнаружено!\n";
+		cout << "Поставщиков не обнаружено!\n";
 	}
 }
 
-bool DeleteSupplier(Supplier** customerList, int position) {
+bool DeleteSupplier(Supplier** supplierList, int position) {
 
-	Supplier* current = *customerList;
+	Supplier* current = *supplierList;
 	Supplier* del;				   // Указатель на удаляемый элемент 
 
-	if (customerList) {
-		while ((current->next) && (current->next->ID != position)) {
-			current = current->next;
-		}
-
-		if (current->next) {
-			del = current->next;
-			current->next = current->next->next;
+	if (supplierList) {
+		if (position == 1) {
+			del = *supplierList;
+			*supplierList = (*supplierList)->next;
+			while (current->next != del) { current = current->next; }
+			current->next = *supplierList;
 			delete del;
 			return true;
 		}
 		else {
-			return false;
+			while ((current->next) && (current->next->ID != position)) {
+				current = current->next;
+			}
+
+			if (current->next) {
+				del = current->next;
+				current->next = current->next->next;
+				delete[] del->orderID;
+				delete del;
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 	}
 	else {
@@ -168,17 +191,70 @@ bool DeleteSupplier(Supplier** customerList, int position) {
 	}
 }
 //Удаление списка с заказчиками
-void DeleteSupplierList(Supplier** customerList) {
+void DeleteSupplierList(Supplier** supplierList) {
 
-	Supplier* current = *customerList;
-	while (current != NULL) {
-		current = current->next;
-		delete* customerList;
-		*customerList = current;
+	if (*supplierList) {
+		Supplier* current = (*supplierList)->next;
+		Supplier* del = current;
+		while (current->next != *supplierList) {
+			current = current->next;
+			delete del;
+			del = current;
+		}
+		delete* supplierList;
+		*supplierList = NULL;
 	}
 }
 //Копипаст!
+void AddSupplier(Supplier** supplierList,Order* orderList) {
+	bool New = false; // Новый ли список
+	Supplier* current;
+	Order* tempOrder = NULL;
+	int i = 1;
+	int temp;
 
+	// Если списка нет то создаем его первый элемент
+	if (*supplierList == NULL) {
+		*supplierList = new Supplier;
+		New = true;
+	}
+
+	current = *supplierList;
+	//Если список не новый, то идем в конец и создаем новый элемент в конце списка
+	if (!New) {
+		while (current->next != *supplierList) {
+			current = current->next;
+
+		} ;
+		current->next = NULL;
+		i = current->ID+1;
+		current->next = new Supplier;
+		current = current->next;
+	}
+
+	// Ручной ввод значений полей
+	current->ID = i++;
+	cout << "Пожалуйста, введите имя поставщика:";
+	cin >> current->name;
+	cout << "Пожалуйста, введите количество заказов поставщика:";
+	cin >> current->quantityOrders;
+	int cicle = current->quantityOrders;
+	for (int i = 0; i < cicle;i++) {
+		cout << "Пожалуйста, введите ID заказа:";
+		cin >> temp;
+		tempOrder = FindOrderID(orderList, temp);
+		if (!(tempOrder->is_used)) {
+			IntReSize(current->orderID, i + 1, current->quantityOrders);
+			current->orderID[i] = temp;
+			SwitchUsedFlag(tempOrder);
+		}
+		else {
+			current->quantityOrders--;
+		}
+		
+	}
+	current->next = *supplierList;
+}                                      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 
@@ -189,12 +265,19 @@ void SupplierInfo(Supplier* supplier, Order* orderList) {
 	if (supplier) {
 
 		setlocale(LC_ALL, "C");
-
 		cout << endl << setfill(horizontalLine) << topLeftCorner
+			<< setw(numberLenght + nameLenght + customerLenght + deliveryTimeLenght)
+			<< topRightCorner;
+
+		cout << endl << setfill(space) << verticalLine
+			<< setw(numberLenght + nameLenght + customerLenght + deliveryTimeLenght - 1)
+			<< supplier->name << right << verticalLine;
+
+		cout << endl << setfill(horizontalLine) << rightJunction
 			<< setw(numberLenght) << bottomJunction
 			<< setw(nameLenght) << bottomJunction
 			<< setw(customerLenght) << bottomJunction
-			<< setw(deliveryTimeLenght) << topRightCorner;
+			<< setw(deliveryTimeLenght) << leftJunction;
 
 		cout << endl << setfill(space) << verticalLine
 			<< setw(numberLenght - 1) << "ID" << right << verticalLine
@@ -233,13 +316,116 @@ void SupplierInfo(Supplier* supplier, Order* orderList) {
 Supplier* GetSupplier(Supplier* supplierList, int key) {
 
 	Supplier* current = supplierList;
+	Supplier* newCurrent;
+	if (current) {
+		do {
+			if (current->ID == key) {
+				newCurrent = new Supplier;
+				SupplierCopyData(newCurrent, current);
+				return newCurrent;
+			}
+			current = current->next;
+		} while (current->next != supplierList);
+	}
+	return NULL;
+}
+
+Supplier* FindSupplierID(Supplier* supplierList, int key) {
+	Supplier* current = supplierList;
 
 	if (current) {
 		do {
 			if (current->ID == key) {
 				return current;
 			}
+			current = current->next;
 		} while (current->next != supplierList);
 	}
 	return NULL;
+}
+Supplier* FindSupplierName(Supplier* supplierList, string key) {
+	Supplier* newList = NULL;			// Новый список, который будет возвращаться в качестве результата
+	Supplier* current = supplierList;		// Указатель, с помощью которого движемся по основному списку
+	Supplier* newCurrent = NULL;		// Указатель при помощи которого движемся по списку с результатами
+
+	if (current) { // Если исходный список существует
+		do { // То пока не дойдем до его конца
+			if (current->name == key) { // Ищем ключ
+				if (!newCurrent) { // Если это первый найденный элемент 
+					newCurrent = new Supplier; // То создаем корень нового списка
+					newList = newCurrent; // Запоминаем корень который будем возвращать					
+				}
+				else { // Иначе создаем следующий элемент списка
+					newCurrent->next = new Supplier;
+					newCurrent = newCurrent->next;
+				}
+				SupplierCopyData(newCurrent, current);
+			}
+			current = current->next; // Далее передвигаемся вперед по основному списку
+		} while (current->next != supplierList);
+
+		if (newCurrent) {
+			newCurrent->next = newList;
+		}
+	}
+
+	return newList; // В конце возвращаем новый список
+}
+Supplier* FindQuantityOrders(Supplier* supplierList, int key) {
+	Supplier* newList = NULL;			// Новый список, который будет возвращаться в качестве результата
+	Supplier* current = supplierList;		// Указатель, с помощью которого движемся по основному списку
+	Supplier* newCurrent = NULL;		// Указатель при помощи которого движемся по списку с результатами
+
+	if (current) { // Если исходный список существует
+		do { // То пока не дойдем до его конца
+			if (current->quantityOrders == key) { // Ищем ключ
+				if (!newCurrent) { // Если это первый найденный элемент 
+					newCurrent = new Supplier; // То создаем корень нового списка
+					newList = newCurrent; // Запоминаем корень который будем возвращать					
+				}
+				else { // Иначе создаем следующий элемент списка
+					newCurrent->next = new Supplier;
+					newCurrent = newCurrent->next;
+				}
+				SupplierCopyData(newCurrent, current);
+			}
+			current = current->next; // Далее передвигаемся вперед по основному списку
+		} while (current->next!=supplierList);
+
+		if (newCurrent) {
+			newCurrent->next = newList;
+		}
+	}
+	
+	return newList; // В конце возвращаем новый список
+}
+Supplier* FindOrderID(Supplier* supplierList, int key) {
+	Supplier* newList = NULL;			// Новый список, который будет возвращаться в качестве результата
+	Supplier* current = supplierList;		// Указатель, с помощью которого движемся по основному списку
+	Supplier* newCurrent = NULL;		// Указатель при помощи которого движемся по списку с результатами
+
+	if (current) { // Если исходный список существует
+		do { // То пока не дойдем до его конца
+			for (int i = 0; i < current->quantityOrders;i++) {
+				if (current->orderID[i] == key) { // Ищем ключ
+					if (!newCurrent) { // Если это первый найденный элемент 
+						newCurrent = new Supplier; // То создаем корень нового списка
+						newList = newCurrent; // Запоминаем корень который будем возвращать					
+					}
+					else { // Иначе создаем следующий элемент списка
+						newCurrent->next = new Supplier;
+						newCurrent = newCurrent->next;
+					}
+					break;
+					SupplierCopyData(newCurrent, current);
+				}
+			}
+			current = current->next; // Далее передвигаемся вперед по основному списку
+		} while (current->next != supplierList);
+		if (newCurrent) {
+			newCurrent->next = newList;
+		}
+	}
+
+	return newList; // В конце возвращаем новый список
 }

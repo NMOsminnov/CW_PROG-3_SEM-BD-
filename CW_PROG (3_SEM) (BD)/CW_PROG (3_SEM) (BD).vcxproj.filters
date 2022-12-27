@@ -41,6 +41,9 @@
     <Text Include="inputSupplier.txt">
       <Filter>Файлы ресурсов</Filter>
     </Text>
+    <Text Include="inputOrder.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BD.h">

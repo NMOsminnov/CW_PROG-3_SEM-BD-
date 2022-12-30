@@ -161,20 +161,16 @@ bool DeleteSupplier(Supplier** supplierList, int position) {
 	Supplier* del;				   // ”казатель на удал€емый элемент 
 
 	if (supplierList) {
-		if (position == 1) {
-			del = *supplierList;
-			*supplierList = (*supplierList)->next;
-			while (current->next != del) { current = current->next; }
-			current->next = *supplierList;
-			delete del;
-			return true;
-		}
-		else {
+
 			while ((current->next) && (current->next->ID != position)) {
 				current = current->next;
 			}
 
+
 			if (current->next) {
+				if (current->next == *supplierList) {
+					*supplierList = current->next;
+				}
 				del = current->next;
 				current->next = current->next->next;
 				delete[] del->orderID;
@@ -184,7 +180,7 @@ bool DeleteSupplier(Supplier** supplierList, int position) {
 			else {
 				return false;
 			}
-		}
+		
 	}
 	else {
 		return false;
@@ -255,7 +251,6 @@ void AddSupplier(Supplier** supplierList,Order* orderList) {
 	}
 	current->next = *supplierList;
 }                                      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 
 
 void SupplierInfo(Supplier* supplier, Order* orderList) {

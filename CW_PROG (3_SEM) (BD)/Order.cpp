@@ -153,15 +153,22 @@ bool DeleteOrder(Order** orderList, int position) {
 	Order* current = *orderList;
 	Order* del;				   // ”казатель на удал€емый элемент 
 
-	if (orderList) {
+	if (*orderList) {		
 	
 			while ((current->next) && (current->next->ID != position)) {
 				current = current->next;
 			}
 
 			if (current->next) {
-				del = current->next;
-				current->next = current->next->next;
+				if (current->next == *orderList) {
+					del = *orderList;
+					*orderList = ( * orderList)->next;
+					current->next = *orderList;
+				}
+				else {
+					del = current->next;
+					current->next = current->next->next;
+				}
 				delete del;
 				return true;
 			}

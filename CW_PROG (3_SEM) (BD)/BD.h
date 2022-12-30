@@ -40,52 +40,54 @@ const char topJunction = (char)202;			// "╩" - Горизонтальная в
 const char crossJunction = (char)206;		// "╬" - пересечение линий
 const char space = (char)32;				// Пустое пространство
 
-
+ // Дверь
 struct Door {
-	int ID = NULL;
-	Door* next = NULL;
+	int ID = NULL;   // ID элемента
+	Door* next = NULL;  // Следующий элемент
 
 	string type;
-	string name;	
+	string name;
 	string productionTime;
 	float price = NULL;
 	float priceOfAccessories = NULL;
 	string typeOfAccessories;
 };
-
+ // Заказчик
 struct Customer {
 
-	int ID = NULL;
-	Customer* next = NULL;
+	int ID = NULL;   // ID элемента
+	Customer* next = NULL; // Следующий элемент
 
-	string name;
-	string surname;
-	string phoneNumber;
+	string name;			// Имя заказчика
+	string surname;			// Фамилия заказчика
+	string phoneNumber;		// Номер телефона
 };
-
+// Заказ
 struct Order {
-	Order* next = NULL;
+	Order* next = NULL;  // Следующий элемент
 
-	int ID = NULL;
+	int ID = NULL; // ID элемента
 
-	int doorID = NULL;
-	int customerID = NULL;
-	string deliveryTime;
-	bool is_used = false;
+	int doorID = NULL;		//ID двери
+	int customerID = NULL;  //ID заказчика
+	string deliveryTime;	//срок произвлдства
+	bool is_used = false;   //Используется ли
 };
-
+// Поставщик
 struct Supplier {
-	int ID = NULL;
+	int ID = NULL;  // ID элемента
 
-	string name;
-	int quantityOrders = NULL;
-	int* orderID = NULL;
-	Supplier* next = NULL;
+	string name;   // Имя поставщика
+	int quantityOrders = NULL; // Количество заказов
+	int* orderID = NULL;       // Id заказов
+	Supplier* next = NULL;     // След. элемент
 };
 
 
 int* IntReSize(int* array, int oldSize, int newSize);
 
+
+// Методы и функции для работы с дверями
 void FileReadDoor(string f_name, Door** doorList);
 void PrintDoor(Door* doorList);
 void AddDoor(Door** doorList);
@@ -101,7 +103,7 @@ Door* FindPriceOfAccessoriesOfDoor(Door* doorList, float key);
 
 
 
-
+// Методы и функции для работы с заказчиками
 void FileReadCustomer(string f_name, Customer** doorList);
 void AddCustomer(Customer** customerList);
 void PrintCustomer(Customer* doorList);
@@ -113,7 +115,7 @@ Customer* FindSurnameOfCustomer(Customer* customerList, string key);
 Customer* FindPhoneNumberOfCustomer(Customer* customerList, string key);
 
 
-
+// Методы и функции для работы с поставщиками
 void FileReadSupplier(string f_name, Supplier** supplierList,Order* orderList);
 void AddSupplier(Supplier** supplierList, Order* orderList);
 void PrintSupplier(Supplier* supplierList);
@@ -126,11 +128,11 @@ Supplier* FindSupplierName(Supplier* supplierList, string key);
 Supplier* FindQuantityOrders(Supplier* supplierList, int key);
 Supplier* FindOrderID(Supplier* supplierList, int key);
 
-
+// Методы и функции для работы с заказами
 void SwitchUsedFlag(Order* order);
 
 void FileReadOrder(string f_name, Order** orderList);
-void AddOrder(Order** orderList, int doorID, int customerID,string deliveryTime);
+void AddOrder(Order** orderList, int doorID, int customerID, string deliveryTime);
 void PrintOrder(Order* orderList);
 bool DeleteOrder(Order** orderList, int position);
 void DeleteOrderList(Order** orderList);

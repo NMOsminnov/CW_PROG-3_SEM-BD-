@@ -110,7 +110,7 @@ void PrintCustomer(Customer* doorList) {
 			<< setw(numberLenght - 1) << "#" << right << verticalLine
 			<< setw(nameLenght - 1) << "Name" << right << verticalLine
 			<< setw(surnameLenght - 1) << "Type" << right << verticalLine
-			<< setw(phoneNumberLenght - 1) << "Price" << right << verticalLine;
+			<< setw(phoneNumberLenght - 1) << "Phone number" << right << verticalLine;
 
 
 		while (current != NULL) {
